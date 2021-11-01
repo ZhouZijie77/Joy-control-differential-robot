@@ -6,6 +6,7 @@ namespace carnet {
     udp_car::udp_car(const ros::NodeHandle &nh,std::string node_name)//构造函数
             : nh_(nh),node_name_(node_name) {
         memset(this->data_to_send, 0, sizeof(this->data_to_send));
+        //初始化udp报文
         this->data_to_send[0] = 0b00001000;
         this->data_to_send[1] = 0b00000000;
         this->data_to_send[2] = 0b00000000;
@@ -15,6 +16,7 @@ namespace carnet {
         this->data_to_send[6] = 0x00;
         this->data_to_send[7] = 0x20;
         vL._int = vR._int = 0;
+        //配置本机ip和远程ip
         local_ip = "192.168.1.101";
         local_port = 8001;
         remote_ip = "192.168.1.10";
@@ -45,11 +47,12 @@ namespace carnet {
     }
 
     void udp_car::sendmsgs() {
+        //连续发两帧控制左右履带
         static int counter = -1;
         counter ++;
         counter = (counter =1) ? counter = 0: counter;
         this->cmd.is_update &= (ros::WallTime::now().toSec() - cmd.last_timestamp) * 1000 < cmd.elapse_time_;
-        if (this->cmd.is_update){
+        if (this->cmd.is_update){//速度值被更新，即回调函数joyCallback被调用
             printf(" I am controling.....");
             switch(counter){
                 case 0:{
