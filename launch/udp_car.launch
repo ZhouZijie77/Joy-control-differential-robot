@@ -1,6 +1,9 @@
 <launch>
     <node pkg="joy" name="joy_node" type="joy_node" />
-	<node pkg="udp_car" name="udp_car_node" type="udp_car_node" output="screen"/>
+	<node pkg="udp_car" name="udp_car_node" type="udp_car_node" output="screen">
+        <param name="velocity_ratio" type="double" value="100.0" />
+        <param name="car_width" type="double" value="1.2" />
+    </node>
 
 </launch>
 

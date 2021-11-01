@@ -16,6 +16,17 @@ namespace carnet {
         this->data_to_send[6] = 0x00;
         this->data_to_send[7] = 0x20;
         vL._int = vR._int = 0;
+        if(!(nh_.getParam("/udp_car_node/velocity_ratio",vel_ratio)))
+        {
+            printf("velocity error\n");
+            vel_ratio = 100.0;
+        }
+        if(!(nh_.getParam("/udp_car_node/car_width",car_width)))
+        {
+            printf("car width error\n");
+            car_width = 1.2;
+        }
+        
         //配置本机ip和远程ip
         local_ip = "192.168.1.101";
         local_port = 8001;
@@ -36,11 +47,12 @@ namespace carnet {
     
     void udp_car::joyCallback(const sensor_msgs::Joy::ConstPtr& con){//回调函数
     	
+        
     	float vel_linear = con->axes[4];
     	float vel_angular = con->axes[3];
-    	double B=1.2;
-    	vL._int = (short)((-vel_linear-vel_angular*B/2)*100);
-    	vR._int = (short)((-vel_linear+vel_angular*B/2)*100);
+    	vL._int = (short)((-vel_linear-vel_angular*car_width/2)*vel_ratio);
+    	vR._int = (short)((-vel_linear+vel_angular*car_width/2)*vel_ratio);
+        
     	cmd.is_update = true;
         cmd.last_timestamp = ros::WallTime::now().toSec();
         
@@ -52,14 +64,16 @@ namespace carnet {
         counter ++;
         counter = (counter =1) ? counter = 0: counter;
         this->cmd.is_update &= (ros::WallTime::now().toSec() - cmd.last_timestamp) * 1000 < cmd.elapse_time_;
+        printf("vl = %d\n",vL._int);
+        printf("vr = %d\n",vR._int);
         if (this->cmd.is_update){//速度值被更新，即回调函数joyCallback被调用
-            printf(" I am controling.....");
+            printf(" I am controling.....\n");
             switch(counter){
                 case 0:{
                     this->data_to_send[8] = 0x01;
                     this->data_to_send[9] = vL._char[0];
                     this->data_to_send[10] = vL._char[1];
-                    printf("vL=: %d,vL[low8]: %d,vL[higher8]: %d\n",vL._int,vL._char[0],vL._char[1]);
+                    //printf("vL=: %d,vL[low8]: %d,vL[higher8]: %d\n",vL._int,vL._char[0],vL._char[1]);
                     sendto(this->CarNetSocket, data_to_send, sizeof(data_to_send), 0, (struct sockaddr *) &addr_remote,
                            addr_remote_len);
                 }
@@ -67,7 +81,7 @@ namespace carnet {
                     this->data_to_send[8] = 0x02;
                     this->data_to_send[9] = vR._char[0];
                     this->data_to_send[10] = vR._char[1];
-                    printf("vR=: %d,vR[low8]: %d,vR[higher8]: %d\n",vR._int,vR._char[0],vR._char[1]);
+                    //printf("vR=: %d,vR[low8]: %d,vR[higher8]: %d\n",vR._int,vR._char[0],vR._char[1]);
                     sendto(this->CarNetSocket, data_to_send, sizeof(data_to_send), 0, (struct sockaddr *) &addr_remote,
                            addr_remote_len);
                 }
@@ -84,7 +98,7 @@ namespace carnet {
                     this->data_to_send[9] = vL._char[0];
                     //this->data_to_send[10] = 0x00;
                     this->data_to_send[10] = vL._char[1];
-                    printf("vL[low8]: %d,vL[higher8]: %d\n",this->data_to_send[9],this->data_to_send[10]);
+                    //printf("vL[low8]: %d,vL[higher8]: %d\n",this->data_to_send[9],this->data_to_send[10]);
                     sendto(this->CarNetSocket, data_to_send, sizeof(data_to_send), 0, (struct sockaddr *) &addr_remote,
                            addr_remote_len);
                 }
@@ -94,7 +108,7 @@ namespace carnet {
                     this->data_to_send[9] = vR._char[0];
                     //this->data_to_send[10] = 0x00;
                     this->data_to_send[10] = vR._char[1];
-                    printf("vR[low8]: %d,vR[higher8]: %d\n",this->data_to_send[9],this->data_to_send[10]);
+                    //printf("vR[low8]: %d,vR[higher8]: %d\n",this->data_to_send[9],this->data_to_send[10]);
                     sendto(this->CarNetSocket, data_to_send, sizeof(data_to_send), 0, (struct sockaddr *) &addr_remote,
                            addr_remote_len);
                 }

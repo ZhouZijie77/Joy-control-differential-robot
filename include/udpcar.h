@@ -47,7 +47,8 @@ namespace carnet {
 
         ros::Subscriber sub;
 
-
+        double vel_ratio;
+        double car_width;
         //// UDP Settings
         /* local address and port */
         int CarNetSocket;
