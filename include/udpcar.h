@@ -27,6 +27,7 @@ struct TimeHandle {
     }
 };
 union RL2byte {
+    //short和char[2]共用内存地址，实现进制转换
     short _int;
     char _char[2];
 };

@@ -150,7 +150,7 @@ bool udp_car::initSocket() {
         this->addr_remote_len = sizeof(this->addr_remote);
 
         //// create a socket
-        this->CarNetSocket = socket(AF_INET, SOCK_DGRAM, 0);
+        this->CarNetSocket = socket(AF_INET, SOCK_DGRAM, 0);//创建一个socket对象
         if (this->CarNetSocket < 0) {
             perror("create CarNetSocket failed!\n");
             return false;
@@ -160,8 +160,8 @@ bool udp_car::initSocket() {
         //// set the local address
         memset((char *) &addr_local, 0, sizeof(addr_local));
         this->addr_local.sin_addr.s_addr = inet_addr(local_ip.c_str());// htonl(INADDR_ANY);
-        this->addr_local.sin_family = AF_INET;
-        this->addr_local.sin_port = htons(local_port);
+        this->addr_local.sin_family = AF_INET; //采用ipv4
+        this->addr_local.sin_port = htons(local_port); //设置端口
 
         //// bind the socket with local address
         if (bind(CarNetSocket, (sockaddr *) &addr_local, sizeof(sockaddr)) < 0) {
@@ -184,9 +184,9 @@ bool udp_car::initSocket() {
     }
 }
 int main(int argc, char **argv) {
-    std::string node_name = "udp_car";
-    ros::init(argc, argv, node_name);
-    ros::NodeHandle nh("");
+    std::string node_name = "udp_car"; 
+    ros::init(argc, argv, node_name); //初始化节点 udp_car
+    ros::NodeHandle nh(""); 
     carnet::udp_car sender(nh, node_name);//实例化udp_car对象 sender
     ROS_INFO("Initialized sender node.");
     ros::spin();
