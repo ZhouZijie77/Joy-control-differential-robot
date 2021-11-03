@@ -2,6 +2,7 @@
 // Created by zzj on 2021/10/27.
 //
 #include "udpcar.h"
+#include <iostream>
 namespace carnet {
     udp_car::udp_car(const ros::NodeHandle &nh,std::string node_name)//构造函数
             : nh_(nh),node_name_(node_name) {
@@ -16,6 +17,7 @@ namespace carnet {
         this->data_to_send[6] = 0x00;
         this->data_to_send[7] = 0x20;
         vL._int = vR._int = 0;
+        // 从参数服务器中读取 vel_ratio, car_width, local_ip, local_port, remote_ip, remote_port 等参数
         if(!(nh_.getParam("/udp_car_node/velocity_ratio",vel_ratio)))
         {
             printf("velocity error\n");
@@ -26,12 +28,31 @@ namespace carnet {
             printf("car width error\n");
             car_width = 1.2;
         }
-        
+        if(!(nh_.getParam("/udp_car_node/local_ip",local_ip)))
+        {
+            printf("local_ip error!");
+            local_ip = "192.168.1.101";
+        }
+        if(!(nh_.getParam("/udp_car_node/local_port",local_port)))
+        {
+            printf("local_port error!");
+            local_port = 8001;
+        }
+        if(!(nh_.getParam("/udp_car_node/remote_ip",remote_ip)))
+        {
+            printf("remote_ip error!");
+            remote_ip = "192.168.1.10";
+        }
+        if(!(nh_.getParam("/udp_car_node/remote_port",remote_port)))
+        {
+            printf("remote_port error!");
+            remote_port = 4001;
+        }
         //配置本机ip和远程ip
-        local_ip = "192.168.1.101";
-        local_port = 8001;
-        remote_ip = "192.168.1.10";
-        remote_port = 4001;
+        // local_ip = "192.168.1.101";
+        // local_port = 8001;
+        // remote_ip = "192.168.1.10";
+        // remote_port = 4001;
         initSocket();
         //turtle_sub = nh_.subscribe<geometry_msgs::Twist>("/turtle1/cmd_vel", 1, &udp_car::joyCallback, this);
         sub = nh_.subscribe("/joy",100,&udp_car::joyCallback,this);

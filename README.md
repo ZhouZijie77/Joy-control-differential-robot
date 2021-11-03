@@ -41,17 +41,22 @@
 
 应该能够看到手柄按钮和遥感每次被操作都会更新数据。根据不同操作按键数据更新确定每个按键对应的axes和button位数。
 
-根据自己的控制习惯修改udp_car/src/udp_car.cpp的joyCallback()回调函数中修改。
+根据自己的控制习惯修改 udp_car/src/udp_car.cpp 的 joyCallback() 回调函数中修改。
 
-## 4、修改ip地址
+## 4、修改参数
 
-查看自己本地的ip地址，然后在udp_car/src/udp_car.cpp文件中修改本机ip地址
+在 udp_car.launch 文件中设置参数，设置
 
-注意，有线连接和wifi连接的本机地址可能会有差异。
+- 车宽：car_width
+- 速度放大倍数：velocity_ratio
+- 本机ip：local_ip
+- 远程ip：local_port
+- 本机端口：remote_ip
+- 远程端口：remote_port
 
 ## 3、编译启动
 
-回到ros工作主目录下
+回到 ros 工作主目录下
 
 `catkin_make`
 
