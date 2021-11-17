@@ -50,7 +50,7 @@ namespace carnet {
 
         double vel_ratio;
         double car_width;
-        //// UDP Settings
+        // UDP 设置
         /* local address and port */
         int CarNetSocket;
         sockaddr_in addr_local;
@@ -64,7 +64,6 @@ namespace carnet {
         int remote_port;
 
         void joyCallback(const sensor_msgs::Joy::ConstPtr&  con);
-        //void joyCallback(const geometry_msgs::Twist keyboard);
         void timerCb();
         bool initSocket(void);
         void sendmsgs();

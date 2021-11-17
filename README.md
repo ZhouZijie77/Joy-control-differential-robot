@@ -7,11 +7,11 @@
 * 接收手柄发送的topic
 * 计算两侧履带速度
 * 给canet发送udp报文
-* canet将udp报文解析成can报文发送给底盘
+* canet将udp报文解析成can报文发送给底盘控制器
 
 # 二、硬件连接介绍
 
-手柄通过无线接收器与电脑相连，电脑通过网线或者无线路由器与canet连接。canet与底盘电机相连。
+手柄通过无线接收器与电脑相连，电脑通过网线或者无线路由器与canet连接。canet与底盘控制器相连。
 
 # 三、操作流程
 
@@ -50,9 +50,9 @@
 - 车宽：car_width
 - 速度放大倍数：velocity_ratio
 - 本机ip：local_ip
-- 远程ip：local_port
-- 本机端口：remote_ip
-- 远程端口：remote_port
+- 本机端口：local_port
+- 目标ip：remote_ip
+- 目标端口：remote_port
 
 ## 3、编译启动
 
@@ -62,7 +62,7 @@
 
 `source devel/setup.bash`
 
-`roslaunch udp_car udp_car.launch`
+`roslaunch [pkg_name] udp_car.launch`
 
 操作手柄驱动履带车！
 
