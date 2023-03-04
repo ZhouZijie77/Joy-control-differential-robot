@@ -6,7 +6,7 @@ namespace carnet {
             : nh_(nh),node_name_(node_name) {
         memset(this->data_to_send, 0, sizeof(this->data_to_send));
         //初始化udp报文
-        //0为帧信息，1-4代表帧ID为0x61，5-12为帧数据，占据八个字节
+        //0为帧信息，1-4代表帧ID为0x601，5-12为帧数据，占据八个字节
         //5-12位的报文数据请参考Canopen控制器协议用户指南，第8位是选择电机通道
         this->data_to_send[0] = 0X28;//帧信息
         this->data_to_send[1] = 0X00;
