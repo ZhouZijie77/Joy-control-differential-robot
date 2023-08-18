@@ -3,11 +3,12 @@
 	<node pkg="udp_car" name="udp_car_node" type="udp_car_node" output="screen">
         <param name="velocity_ratio" type="double" value="100.0" />
         <param name="car_width" type="double" value="1.2" />
-        <param name="local_ip" type="string" value="192.168.1.101"/>
-        <param name="local_port" type="int" value="8001"/>
-        <param name="remote_ip" type="string" value="192.168.1.10"/>
-        <param name="remote_port" type="int" value="4001"/>
+        <param name="target_ip" type="string" value="192.168.1.10"/>
+        <param name="target_port" type="int" value="4001"/>
+        
+        <!-- not used -->
+        <param name="host_ip" type="string" value="192.168.1.101"/>
+        <param name="host_port" type="int" value="8001"/>
     </node>
-
 </launch>
 
